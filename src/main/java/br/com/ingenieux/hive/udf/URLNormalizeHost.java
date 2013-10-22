@@ -23,7 +23,7 @@ public class URLNormalizeHost extends UDF {
 	public Text evaluate(Text input) {
 		if (null != input) {
 			try {
-				String result = PUBLIC_LIST_SERVICE.getReverseDomainFor(input
+				String result = PUBLIC_LIST_SERVICE.getDomainFor(input
 						.toString());
 
 				if (null != result)
