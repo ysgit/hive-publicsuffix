@@ -1,11 +1,16 @@
 package br.com.ingenieux.hive.udf;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hive.ql.exec.Description;
 import org.apache.hadoop.hive.ql.exec.UDF;
 import org.apache.hadoop.hive.ql.udf.UDFType;
 import org.apache.hadoop.io.Text;
 
 import br.com.ingenieux.hive.udf.util.PublicListService;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @UDFType(deterministic = true)
 @Description(name = "normalize_host", value = "_FUNC_(str) - Gets a normalized Host")
@@ -20,15 +25,20 @@ public class URLNormalizeHost extends UDF {
 		}
 	}
 
-	public Text evaluate(Text input) {
+	public ArrayList<Text> evaluate(Text input) {
 		if (null != input) {
 			try {
-				String result = PUBLIC_LIST_SERVICE.getDomainFor(input
+				String domain = PUBLIC_LIST_SERVICE.getDomainFor(input
 						.toString());
 
-				if (null != result)
-					return new Text(result);
-			} catch (Exception exc) {
+				if (null != domain){
+					ArrayList<Text> result = new ArrayList<Text>();
+					List<String> domainSplit = Arrays.asList(domain.split("\\."));
+					result.add(new Text(domainSplit.get(0)));
+					result.add(new Text(StringUtils.join(domainSplit.subList(1, domainSplit.size()), ".")));
+					return result;
+				}
+			} catch (Exception ignored) {
 
 			}
 		}

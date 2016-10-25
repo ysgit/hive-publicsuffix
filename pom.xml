@@ -36,7 +36,7 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
-			<scope>test</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -45,4 +45,28 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+	    <plugins>
+		<plugin>
+		    <groupId>com.googlecode.maven-download-plugin</groupId>
+		    <artifactId>download-maven-plugin</artifactId>
+		    <version>1.2.0</version>
+		    <executions>
+		        <execution>
+		            <id>package-psl</id>
+		            <phase>generate-resources</phase>
+		            <goals>
+		                <goal>wget</goal>
+		            </goals>
+		            <configuration>
+		                <url>https://publicsuffix.org/list/public_suffix_list.dat</url>
+		                <outputDirectory>${project.build.outputDirectory}/br/com/ingenieux/hive/udf/util</outputDirectory>
+		                <outputFileName>public-tld-list.txt</outputFileName>
+		            </configuration>
+		        </execution>
+		    </executions>
+		</plugin>
+	    </plugins>
+	</build>
 </project>
